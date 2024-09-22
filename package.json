@@ -19,7 +19,10 @@
   },
   "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c",
   "devDependencies": {
+    "@cloudinary/url-gen": "^1.21.0",
     "astro-carousel": "^2.0.8",
+    "astro-cloudinary": "^1.0.3",
+    "cloudinary": "^2.5.0",
     "sass": "^1.79.2"
   }
 }
