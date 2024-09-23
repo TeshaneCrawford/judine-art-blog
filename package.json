@@ -24,6 +24,7 @@
     "@cloudinary/url-gen": "^1.21.0",
     "@fontsource/chivo": "^5.1.0",
     "@iconify-json/uil": "^1.2.0",
+    "@nuxthub/core": "^0.7.19",
     "@typescript-eslint/parser": "^8.7.0",
     "astro-carousel": "^2.0.8",
     "astro-cloudinary": "^1.0.3",
