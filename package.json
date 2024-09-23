@@ -24,9 +24,13 @@
     "@cloudinary/url-gen": "^1.21.0",
     "@fontsource/chivo": "^5.1.0",
     "@iconify-json/uil": "^1.2.0",
+    "@typescript-eslint/parser": "^8.7.0",
     "astro-carousel": "^2.0.8",
     "astro-cloudinary": "^1.0.3",
     "cloudinary": "^2.5.0",
+    "eslint": "^9.11.1",
+    "eslint-plugin-astro": "^1.2.4",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
     "sass": "^1.79.2"
   }
 }

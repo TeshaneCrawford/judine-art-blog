@@ -26,4 +26,16 @@ export default defineConfig({
         contentLayer: true,
     },
     output: "static",
+    vite: {
+        css: {
+            preprocessorOptions: {
+                scss: {
+                  api: 'modern-compiler', // or "modern", "legacy"
+                  importers: [
+                    // ...
+                  ],
+                },
+              },
+        }
+    }
 });
