@@ -1,4 +1,5 @@
 import { defineCollection, z } from 'astro:content';
+import { cldAssetsLoader } from 'astro-cloudinary/loaders';
 
 const blog = defineCollection({
 	type: 'content',
@@ -13,4 +14,12 @@ const blog = defineCollection({
 	}),
 });
 
-export const collections = { blog };
+const assets = defineCollection({
+	type: 'content_layer',
+	loader: cldAssetsLoader({
+		limit: 2,
+		folder: 'NewYork'
+	  })
+  })
+
+export const collections = { blog, assets };

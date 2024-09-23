@@ -1,0 +1,109 @@
+---
+import { Photo } from "astro-carousel";
+// import { CldImage } from 'astro-cloudinary';
+// import { Image } from 'astro:assets';
+// import { getCollection } from 'astro:content';
+// const assets = await getCollection('assets');
+// import { getEntry } from 'astro:content';
+// const assets = await getEntry('assets', '5409EB86-4C38-438F-B9EA-CD9C18258AF7_qe9uoi');
+
+// import { fetchImages } from '../utils/lib/fetchCloudImages';
+
+// const images = await fetchImages();
+
+
+import { getImages } from '../utils/lib/fetchCloudImages';
+
+// const images = await getImages();
+
+interface Props {
+  folder?: string;
+}
+
+const { folder } = Astro.props;
+
+let images: Awaited<ReturnType<typeof getImages>> = [];
+let error: string | null = null;
+
+try {
+  images = await getImages(folder);
+} catch (e) {
+  error = e instanceof Error ? e.message : 'An unknown error occurred';
+}
+
+---
+<div class="about-photo">
+
+    {error ? (
+        <p class="error">{error}</p>
+      ) : (
+        <div>
+          {images.map((image) => (
+            <Photo 
+              src={image.url}
+              alt={`Image ${image.public_id}`}
+              width={image.width}
+              height={image.height}
+              loading="lazy"
+            />
+          ))}
+        </div>
+      )}
+    <!-- {images.map((image) => (
+        <Photo
+        src={image.url}
+      alt={`Image ${image.public_id}`}
+      width={image.width}
+      height={image.height}
+      loading="lazy"
+        />
+      ))} -->
+        <!-- {assets.map(asset => {
+          return (
+              <Photo
+                src={asset.data.secure_url}
+                width={asset.data.width}
+                height={asset.data.height}
+                alt=""
+                widths={[360, 600]}
+        loading="eager"
+        aspectRatio={asset.data.width /
+            asset.data.height}
+              />
+          )
+        })}
+
+        <Image 
+        src="https://res.cloudinary.com/dmmgsnpl0/image/upload/v1726353213/NewYork/5409EB86-4C38-438F-B9EA-CD9C18258AF7_qe9uoi.jpg"
+        width={400}
+        height={500}
+        alt=""
+        /> -->
+
+        <!-- <Photo
+        src={asset.data.public_id}
+        width={asset.data.width}
+        height={asset.data.height}
+        alt=""
+        widths={[360, 600]}
+        loading="eager"
+        aspectRatio={asset.data.width /
+            asset.data.height}
+    /> -->
+</div>
+
+<style lang="scss">
+    .about-photo {
+        margin: auto 0;
+        border: 8px solid #fff;
+        background-color: #fff;
+        box-shadow: 0 0 20px 1px rgb(202, 202, 202, 0.5);
+        transition: transform 0.5s cubic-bezier(0.36, 0.07, 0.25, 1);
+    }
+
+    .image-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+</style>
