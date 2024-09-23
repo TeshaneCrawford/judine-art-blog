@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig, passthroughImageService } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import nuxthub from '@nuxthub/core';
 
 import sitemap from '@astrojs/sitemap';
 
@@ -13,7 +14,8 @@ export default defineConfig({
         prefetchAll: true,
         defaultStrategy: "viewport",
     },
-    integrations: [mdx(), sitemap(), icon({
+    // @ts-ignore
+    integrations: [mdx(), nuxthub(), sitemap(), icon({
         include: {
             uil: ["instagram-alt", "twitter-alt", "facebook"],
           },
