@@ -1,44 +1,100 @@
 ---
 const today = new Date();
-
 import { Icon } from 'astro-icon/components'
 ---
 
 <footer>
-	&copy; {today.getFullYear()} Judine Fiddler. All rights reserved.
-	<div class="social-links">
-		<a href="https://www.instagram.com/judinefiddler/" target="_blank">
-			<span class="sr-only">Follow Judine on Instagram</span>
-			<Icon name="uil:instagram-alt" size="28" />
-		</a>
-		<a href="https://www.instagram.com/judinefiddler/" target="_blank">
-			<span class="sr-only">Follow Judine on Facebook</span>
-			<Icon name="uil:facebook" size="28" />
-		</a>
-		<a href="https://x.com/luvminuh" target="_blank">
-			<span class="sr-only">Follow Judine on Twitter</span>
-			<Icon name="uil:twitter-alt" size="28" />
-		</a>
-	</div>
+	<p class="motto"><mark>“The earth is art, the photographer is only a witness.”</mark></p>
+  <div class="footer-content">
+    <div class="copyright">
+      &copy; {today.getFullYear()} Judine Fiddler. All rights reserved.
+    </div>
+    <div class="social-links">
+      <a href="https://www.instagram.com/judinefiddler/" target="_blank" rel="noopener noreferrer">
+        <span class="sr-only">Follow Judine on Instagram</span>
+        <Icon name="uil:instagram-alt" size="28" />
+      </a>
+      <a href="https://www.facebook.com/judinefiddler/" target="_blank" rel="noopener noreferrer">
+        <span class="sr-only">Follow Judine on Facebook</span>
+        <Icon name="uil:facebook" size="28" />
+      </a>
+      <a href="https://x.com/luvminuh" target="_blank" rel="noopener noreferrer">
+        <span class="sr-only">Follow Judine on Twitter</span>
+        <Icon name="uil:twitter-alt" size="28" />
+      </a>
+    </div>
+  </div>
 </footer>
+
 <style>
-	footer {
-		padding: 2em 1em 6em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
-		text-align: center;
-	}
-	.social-links {
-		display: flex;
-		justify-content: center;
-		gap: 1em;
-		margin-top: 1em;
-	}
-	.social-links a {
-		text-decoration: none;
-		color: rgb(var(--gray));
-	}
-	.social-links a:hover {
-		color: rgb(var(--gray-dark));
-	}
+  footer {
+    background: linear-gradient(var(--gray-gradient)) no-repeat;
+    color: rgb(var(--gray));
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1em 0em;
+  }
+
+  .copyright {
+    text-align: center;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+  }
+
+  .social-links a {
+    text-decoration: none;
+    color: rgb(var(--gray));
+    transition: color 0.3s ease;
+  }
+
+  .social-links a:hover {
+    color: rgb(var(--gray-dark));
+  }
+
+  .motto {
+    text-align: center;
+    margin-top: 4em;
+    padding-bottom: 1em;
+  }
+
+  mark {
+    border-radius: 0.25em;
+    padding: 0.1em 0.3em;
+    background: transparent;
+    background-image: linear-gradient(
+      to right,
+      rgba(255, 204, 0, 0.1),
+      rgba(255, 204, 0, 0.3) 12%,
+      rgba(255, 204, 0, 0.1)
+    );
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    color: var(--primary);
+  }
+
+  @media (min-width: 768px) {
+    .footer-content {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .copyright {
+      text-align: left;
+    }
+
+    .social-links {
+      justify-content: flex-end;
+    }
+  }
 </style>
