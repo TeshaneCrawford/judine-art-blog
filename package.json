@@ -15,11 +15,15 @@
     "@astrojs/rss": "^4.0.7",
     "@astrojs/sitemap": "^3.1.6",
     "astro": "^4.15.8",
+    "astro-icon": "^1.1.1",
+    "motion": "^10.18.0",
     "typescript": "^5.6.2"
   },
   "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c",
   "devDependencies": {
     "@cloudinary/url-gen": "^1.21.0",
+    "@fontsource/chivo": "^5.1.0",
+    "@iconify-json/uil": "^1.2.0",
     "astro-carousel": "^2.0.8",
     "astro-cloudinary": "^1.0.3",
     "cloudinary": "^2.5.0",
