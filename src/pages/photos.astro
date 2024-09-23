@@ -1,8 +1,12 @@
 ---
 import Layout from '../layouts/MainLayout.astro';
 import Home from '../components/home/ImageBlock.astro'
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
-<Layout>
+<Layout
+title = {SITE_TITLE}
+description = {SITE_DESCRIPTION}
+>
     <Home />
 </Layout>

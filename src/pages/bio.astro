@@ -1,10 +1,14 @@
 ---
 import Layout from '../layouts/MainLayout.astro';
 import BioPhoto from '../components/BioPhoto.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
-<Layout>
-	<div>
+<Layout
+title = {SITE_TITLE}
+description = {SITE_DESCRIPTION}
+>
+	<div class="main">
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
 			labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
@@ -14,6 +18,43 @@ import BioPhoto from '../components/BioPhoto.astro';
 			vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
 			sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
 		</p>
-		<!-- <BioPhoto folder="NewYork" /> -->
+		<BioPhoto folder="BioPic" />
 	</div>
 </Layout>
+
+<style>
+	.main {
+		display: grid;
+		grid-template-columns: auto auto;
+		column-gap: 8rem;
+	}
+
+	@media only screen and (max-width: 600px) {
+	p {
+		margin-bottom: 4rem;
+	}
+}
+
+	@media only screen and (max-width: 600px) {
+	.main {
+		display: grid;
+		grid-template-columns: auto;
+		column-gap: 8rem;
+	}
+}
+@media only screen and (min-width: 600px) {
+	.main {
+		display: grid;
+		grid-template-columns: auto;
+		column-gap: 8rem;
+	}
+}
+
+@media only screen and (min-width: 768px) {
+	.main {
+		display: grid;
+		grid-template-columns: auto auto;
+		column-gap: 8rem;
+	}
+}
+</style>

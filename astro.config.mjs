@@ -8,7 +8,11 @@ import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://example.com',
+    site: 'https://judinefiddler.com',
+    prefetch: {
+        prefetchAll: true,
+        defaultStrategy: "viewport",
+    },
     integrations: [mdx(), sitemap(), icon({
         include: {
             uil: ["instagram-alt", "twitter-alt", "facebook"],
@@ -20,5 +24,6 @@ export default defineConfig({
     },
     experimental: {
         contentLayer: true,
-    }
+    },
+    output: "static",
 });
