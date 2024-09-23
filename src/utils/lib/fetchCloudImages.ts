@@ -54,7 +54,7 @@ export async function getImages(folder?: string): Promise<ImageResource[]> {
       const options: any = {
         resource_type: 'image',
         type: 'upload',
-        max_results: 110,
+        max_results: 50,
       };
   
       if (folder) {
