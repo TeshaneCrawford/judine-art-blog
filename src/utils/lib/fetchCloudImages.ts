@@ -54,7 +54,7 @@ export async function getImages(folder?: string): Promise<ImageResource[]> {
       const options: any = {
         resource_type: 'image',
         type: 'upload',
-        max_results: 50,
+        max_results: 110,
       };
   
       if (folder) {
@@ -72,6 +72,8 @@ export async function getImages(folder?: string): Promise<ImageResource[]> {
           transformation: [
             { fetch_format: 'auto' },
             { quality: 'auto' },
+            { width: 'auto', dpr: 'auto' },
+            { crop: 'scale' },
           ],
         }),
       }));
