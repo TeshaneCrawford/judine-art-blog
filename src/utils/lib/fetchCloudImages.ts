@@ -48,40 +48,45 @@ interface ImageResource {
   width: number;
   height: number;
   url: string;
+  created_at: string;
 }
+
 export async function getImages(folder?: string): Promise<ImageResource[]> {
-    try {
-      const options: any = {
-        resource_type: 'image',
-        type: 'upload',
-        max_results: 110,
-      };
-  
-      if (folder) {
-        options.prefix = folder;
-      }
-  
-      const { resources } = await cloudinary.api.resources(options);
-  
-      return resources.map((resource: any) => ({
-        public_id: resource.public_id,
-        format: resource.format,
-        width: resource.width,
-        height: resource.height,
-        url: cloudinary.url(resource.public_id, {
-          transformation: [
-            { fetch_format: 'auto' },
-            { quality: 'auto' },
-            { width: 'auto', dpr: 'auto' },
-            { crop: 'scale' },
-          ],
-        }),
-      }));
-    } catch (error) {
-      console.error('Error fetching images from Cloudinary:', error);
-      throw new Error('Failed to fetch images from Cloudinary');
+  try {
+    const options: any = {
+      resource_type: 'image',
+      type: 'upload',
+      max_results: 59,
+      sort_by: 'created_at',
+      direction: 'asc'  // Changed to 'asc' for oldest first
+    };
+
+    if (folder) {
+      options.prefix = folder;
     }
+
+    const { resources } = await cloudinary.api.resources(options);
+
+    return resources.map((resource: any) => ({
+      public_id: resource.public_id,
+      format: resource.format,
+      width: resource.width,
+      height: resource.height,
+      created_at: resource.created_at,
+      url: cloudinary.url(resource.public_id, {
+        transformation: [
+          { fetch_format: 'auto' },
+          { quality: 'auto' },
+          { width: 'auto', dpr: 'auto' },
+          { crop: 'scale' },
+        ],
+      }),
+    }));
+  } catch (error) {
+    console.error('Error fetching images from Cloudinary:', error);
+    throw new Error('Failed to fetch images from Cloudinary');
   }
+}
 
 // export async function getImages(folder?: string): Promise<ImageResource[]> {
 //   const options: any = {
