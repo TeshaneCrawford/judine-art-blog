@@ -1,3 +1,117 @@
+<!-- ---
+import { Carousel, Photo } from "astro-carousel";
+import type { ComponentProps } from "astro/types";
+import { getImages } from "../../utils/lib/fetchCloudImages";
+import type { Picture } from "astro:assets";
+
+type PhotoProps = ComponentProps<typeof Picture> & {
+  src: string;
+  alt: string;
+  aspectRatio?: number;
+  classWrapper?: string;
+  isCarousel?: boolean;
+};
+
+const { path } = Astro.params;
+
+interface Props {
+  folder?: string;
+}
+
+const { folder } = Astro.props;
+
+const cloudinaryImages = await getImages(folder);
+
+const images: PhotoProps[] = cloudinaryImages.map((img) => ({
+  src: img.url,
+  alt: img.public_id,
+  width: img.width,
+  height: img.height,
+  aspectRatio: img.width / img.height,
+  isCarousel: true,
+  format: "webp" as const,
+}));
+
+const imagesGrid = images.map((img, i) => ({
+  ...img,
+  loading: i < 3 ? "eager" as const : "lazy" as const,
+  "data-carousel-index": i,
+  isCarousel: false,
+}));
+---
+
+<script>
+  import { animate, inView } from "motion";
+  inView(
+    ".entry__elem",
+    ({ target }) => {
+      animate(
+        target,
+        {
+          opacity: [0, 1],
+          transform: ["translate3d(0, 5%, 0)", "translate3d(0, 0, 0)"],
+        },
+        { delay: 0.1, duration: 0.75, easing: [0.36, 0.07, 0.25, 1] }
+      );
+    },
+    { amount: 5 }
+  );
+</script>
+
+<Carousel images={images} />
+<ul class="entry" id="carouselTargetList">
+  {
+    imagesGrid.map((img, i) => (
+      <li class="entry__elem">
+        <div class="entry__elem-hover">
+          <a
+            href={`/${path}?image=${i}`}
+            data-carousel-index={i}
+            class="entry__link"
+            aria-label={`Open image ${img.alt || i}`}
+          >
+            <Photo {...img} />
+          </a>
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<style lang="scss" define:vars={{ numOfPhotos: imagesGrid.length }} is:global>
+  .entry {
+    display: grid;
+    gap: var(--space-m);
+    margin: var(--space-m) 0 0 0;
+    padding: 0;
+    list-style: none;
+    @media screen and (min-width: 732px) {
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-auto-rows: var(--maxHeight);
+      gap: var(--space-xl);
+      align-items: center;
+    }
+    &__elem {
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      &-hover {
+        border: 8px solid #fff;
+        box-shadow: 0 0 20px 1px rgba(202, 202, 202, 0.25);
+        transition: 0.25s cubic-bezier(0.36, 0.07, 0.25, 1);
+        transition-property: transform, box-shadow;
+        &:hover {
+          cursor: pointer;
+          box-shadow: 0 0 20px 1px rgba(202, 202, 202, 0.5);
+          transform: translate3d(0, -2%, 0);
+        }
+      }
+    }
+    &__link {
+      display: block;
+    }
+  }
+</style> -->
+
 ---
 import { Carousel, Photo } from "astro-carousel";
 import type { ComponentProps } from "astro/types";
@@ -86,10 +200,11 @@ const imagesGrid = images.map((img, i) => ({
     padding: 0;
     list-style: none;
     @media screen and (min-width: 732px) {
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      grid-auto-rows: 200px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-auto-rows: var(--maxHeight);
       grid-auto-flow: dense;
-      gap: var(--space-m);
+      align-items: center;
+      gap: var(--space-xl);
     }
     &__elem {
       opacity: 0;
@@ -97,7 +212,7 @@ const imagesGrid = images.map((img, i) => ({
       &.landscape {
         @media screen and (min-width: 732px) {
           grid-column: span 2;
-          grid-row: span 2;
+          grid-row: span 1;
         }
       }
       &-hover {
