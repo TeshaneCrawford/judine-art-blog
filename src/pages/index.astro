@@ -2,11 +2,22 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import Home from '../components/home/ImageBlock.astro'
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BioPhoto from "../components/BioPhoto.astro";
 ---
 
 <MainLayout
  title = {SITE_TITLE}
  description = {SITE_DESCRIPTION}
 >
-	<Home folder="NewYork" />
+	<div class="container">
+		<BioPhoto folder="BioPic" />
+	</div>
 </MainLayout>
+
+<style>
+	.container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+</style>
