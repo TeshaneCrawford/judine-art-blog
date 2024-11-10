@@ -1,0 +1,195 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface NavItem {
+  title: string;
+  path: string;
+  children?: Array<{
+    title: string;
+    path: string;
+  }>;
+}
+
+const navItems: NavItem[] = [
+  { title: 'Home', path: '/' },
+  {
+    title: 'Photos',
+    path: '/photos',
+    children: [
+      { title: 'Nature', path: '/photos/nature' },
+      { title: 'Interiors', path: '/photos/interiors' },
+      { title: 'Architecture', path: '/photos/architecture' }
+    ]
+  },
+  {
+    title: 'Travels',
+    path: '/travels',
+    children: [
+      { title: 'Caribbean', path: '/travels/caribbean' },
+      { title: 'USA', path: '/travels/usa' },
+      { title: 'Europe', path: '/travels/europe' }
+    ]
+  },
+  { title: 'Bio', path: '/bio' }
+];
+---
+
+<script>
+  // Handle mobile menu toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const dropdownBtns = document.querySelectorAll('.dropdown-btn');
+
+  mobileMenuBtn?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+
+  // Handle dropdowns
+  dropdownBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const dropdown = btn.nextElementSibling;
+      dropdown?.classList.toggle('hidden');
+      
+      // Rotate chevron icon
+      const chevron = btn.querySelector('.chevron-icon');
+      chevron?.classList.toggle('rotate-180');
+    });
+  });
+
+  // Handle scroll behavior
+  let lastScroll = 0;
+  const navbar = document.getElementById('navbar');
+  
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.scrollY;
+    
+    if (currentScroll > lastScroll && currentScroll > 100) {
+      // Scrolling down
+      navbar?.classList.add('-translate-y-full');
+    } else {
+      // Scrolling up
+      navbar?.classList.remove('-translate-y-full');
+    }
+    
+    lastScroll = currentScroll;
+  });
+</script>
+
+<nav
+  id="navbar"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/80 backdrop-blur-md"
+>
+  <div class="max-w-8xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href="/" class="text-2xl font-bold text-gray-800">Judine</a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex md:items-center md:space-x-8">
+        {navItems.map(item => (
+          <div class="relative group">
+            {item.children ? (
+              <div>
+                <button class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-gray-900">
+                  {item.title}
+                  <Icon name="mdi:chevron-down" class="w-4 h-4 ml-1" />
+                </button>
+                <div class="absolute hidden group-hover:block w-48 py-2 mt-2 bg-white rounded-md shadow-xl">
+                  {item.children.map(child => (
+                    <a
+                      href={child.path}
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      {child.title}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <a
+                href={item.path}
+                class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-gray-900"
+              >
+                {item.title}
+              </a>
+            )}
+          </div>
+        ))}
+        
+        <!-- Instagram Icon -->
+        <a
+          href="https://instagram.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-gray-700 hover:text-gray-900"
+        >
+          <Icon name="mdi:instagram" class="w-6 h-6" />
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="flex md:hidden">
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open main menu</span>
+          <Icon name="mdi:menu" class="block h-6 w-6" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden">
+    <div class="px-2 pt-2 pb-3 space-y-1 bg-white/80 backdrop-blur-md">
+      {navItems.map(item => (
+        <div>
+          {item.children ? (
+            <div>
+              <button
+                class="dropdown-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+              >
+                {item.title}
+                <Icon name="mdi:chevron-down" class="chevron-icon w-5 h-5 transform transition-transform duration-200" />
+              </button>
+              <div class="hidden pl-4">
+                {item.children.map(child => (
+                  <a
+                    href={child.path}
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                  >
+                    {child.title}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <a
+              href={item.path}
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+            >
+              {item.title}
+            </a>
+          )}
+        </div>
+      ))}
+      
+      <!-- Mobile Instagram Icon -->
+      <a
+        href="https://instagram.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+      >
+        <Icon name="mdi:instagram" class="w-6 h-6 mr-2" />
+        Instagram
+      </a>
+    </div>
+  </div>
+</nav>
