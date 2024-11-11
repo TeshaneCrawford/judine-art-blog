@@ -1,0 +1,26 @@
+---
+import Footer from '../components/Footer.astro';
+import Header from '../components/NavigationBar.astro';
+import BaseMeta from '../components/BaseMeta.astro';
+
+const { title, description } = Astro.props;
+---
+
+<html lang='en'>
+  <head>
+    <BaseMeta title={title} description={description} />
+    <style></style>
+  </head>
+
+  <body>
+    <Header />
+    <main class='max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-16'>
+      <div>
+        <slot />
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style></style>

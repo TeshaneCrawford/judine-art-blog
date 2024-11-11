@@ -1,0 +1,215 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface NavItem {
+  title: string;
+  path: string;
+  children?: Array<{
+    title: string;
+    path: string;
+  }>;
+}
+
+const navItems: NavItem[] = [
+  { title: 'Home', path: '/' },
+  {
+    title: 'Nature',
+    path: '/nature',
+    children: [
+      { title: 'Winter', path: '/nature/Winter' },
+      { title: 'Fall', path: '/nature/Fall' },
+      { title: 'Summer', path: '/nature/Summer' },
+      { title: 'Spring', path: '/nature/Spring' },
+      { title: 'Sunsets', path: '/nature/Sunsets' },
+    ]
+  },
+  {
+    title: 'Travels',
+    path: '/travels',
+    children: [
+      { title: 'Caribbean', path: '/travels/Caribbean' },
+      { title: 'USA', path: '/travels/United States' },
+      { title: 'Europe', path: '/travels/Europe' }
+    ]
+  },
+  {
+    title: 'Architecture',
+    path: '/architecture',
+    children: [
+      { title: 'Interiors', path: '/architecture/Interiors' },
+      { title: 'Exteriors', path: '/architecture/Exteriors' }
+    ]
+  },
+  { title: 'Bio', path: '/bio' }
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<script>
+  // Handle mobile menu toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const dropdownBtns = document.querySelectorAll('.dropdown-btn');
+
+  mobileMenuBtn?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+
+  // Handle dropdowns
+  dropdownBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const dropdown = btn.nextElementSibling;
+      dropdown?.classList.toggle('hidden');
+      
+      // Rotate chevron icon
+      const chevron = btn.querySelector('.chevron-icon');
+      chevron?.classList.toggle('rotate-180');
+    });
+  });
+
+  // Handle scroll behavior
+  let lastScroll = 0;
+  const navbar = document.getElementById('navbar');
+  
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.scrollY;
+    
+    if (currentScroll > lastScroll && currentScroll > 100) {
+      // Scrolling down
+      navbar?.classList.add('-translate-y-full');
+    } else {
+      // Scrolling up
+      navbar?.classList.remove('-translate-y-full');
+    }
+    
+    lastScroll = currentScroll;
+  });
+</script>
+
+<nav
+  id="navbar"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/80 backdrop-blur-md"
+>
+  <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href="/" class="text-2xl font-bold text-gray-800">Judine</a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex md:items-center md:space-x-8">
+        {navItems.map(item => (
+          <div class="relative group">
+            {item.children ? (
+              <>
+                <button 
+                  class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-gray-900 cursor-pointer"
+                >
+                  {item.title}
+                  <Icon name="mdi:chevron-down" class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" />
+                </button>
+                {/* Dropdown container with larger hit area */}
+                <div class="absolute left-0 pt-2 w-max">
+                  {/* Invisible area to prevent gap between button and dropdown */}
+                  <div class="invisible h-2 -mt-2"></div>
+                  {/* Actual dropdown content */}
+                  <div class="hidden group-hover:block bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                    {item.children.map(child => (
+                      <a
+                        href={child.path}
+                        class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap transition-colors duration-150"
+                      >
+                        {child.title}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <a
+                href={item.path}
+                class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-gray-900"
+              >
+                {item.title}
+              </a>
+            )}
+          </div>
+        ))}
+        
+        <!-- Instagram Icon -->
+        <a
+          href="https://instagram.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-gray-700 hover:text-gray-900 transition-colors duration-150"
+        >
+          <Icon name="mdi:instagram" class="w-6 h-6" />
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="flex md:hidden">
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open main menu</span>
+          <Icon name="mdi:menu" class="block h-6 w-6" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden">
+    <div class="px-2 pt-2 pb-3 space-y-1 bg-white/80 backdrop-blur-md border-t border-gray-200">
+      {navItems.map(item => (
+        <div>
+          {item.children ? (
+            <div>
+              <button
+                class="dropdown-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+              >
+                {item.title}
+                <Icon name="mdi:chevron-down" class="chevron-icon w-5 h-5 transform transition-transform duration-200" />
+              </button>
+              <div class="hidden pl-4 space-y-1">
+                {item.children.map(child => (
+                  <a
+                    href={child.path}
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                  >
+                    {child.title}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <a
+              href={item.path}
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+            >
+              {item.title}
+            </a>
+          )}
+        </div>
+      ))}
+      
+      <!-- Mobile Instagram Icon -->
+      <a
+        href="https://instagram.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+      >
+        <Icon name="mdi:instagram" class="w-6 h-6 mr-2" />
+        Instagram
+      </a>
+    </div>
+  </div>
+</nav>

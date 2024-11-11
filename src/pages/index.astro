@@ -1,23 +1,8 @@
 ---
-import MainLayout from "../layouts/MainLayout.astro";
-import Home from '../components/home/ImageBlock.astro'
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import BioPhoto from "../components/BioPhoto.astro";
+import AppLayout from '../layouts/AppLayout.astro';
 ---
 
-<MainLayout
- title = {SITE_TITLE}
- description = {SITE_DESCRIPTION}
->
-	<div class="container">
-		<BioPhoto folder="BioPic" />
-	</div>
-</MainLayout>
-
-<style>
-	.container {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-</style>
+<AppLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  <h1>Astro</h1>
+</AppLayout>
