@@ -16,22 +16,24 @@ const navItems: NavItem[] = [
     title: 'Photos',
     path: '/photos',
     children: [
-      { title: 'Nature', path: '/photos/nature' },
-      { title: 'Interiors', path: '/photos/interiors' },
-      { title: 'Architecture', path: '/photos/architecture' }
+      { title: 'Nature', path: '/photos/Nature' },
+      { title: 'Interiors', path: '/photos/Interiors' },
+      { title: 'Architecture', path: '/photos/Architecture' }
     ]
   },
   {
     title: 'Travels',
     path: '/travels',
     children: [
-      { title: 'Caribbean', path: '/travels/caribbean' },
-      { title: 'USA', path: '/travels/usa' },
-      { title: 'Europe', path: '/travels/europe' }
+      { title: 'Caribbean', path: '/travels/Caribbean' },
+      { title: 'USA', path: '/travels/Usa' },
+      { title: 'Europe', path: '/travels/Europe' }
     ]
   },
   { title: 'Bio', path: '/bio' }
 ];
+
+const currentPath = Astro.url.pathname;
 ---
 
 <script>
@@ -79,7 +81,7 @@ const navItems: NavItem[] = [
   id="navbar"
   class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/80 backdrop-blur-md"
 >
-  <div class="max-w-8xl mx-auto px-4 sm:px-6">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
       <div class="flex-shrink-0">
@@ -91,22 +93,30 @@ const navItems: NavItem[] = [
         {navItems.map(item => (
           <div class="relative group">
             {item.children ? (
-              <div>
-                <button class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-gray-900">
+              <>
+                <button 
+                  class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-gray-900 cursor-pointer"
+                >
                   {item.title}
-                  <Icon name="mdi:chevron-down" class="w-4 h-4 ml-1" />
+                  <Icon name="mdi:chevron-down" class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" />
                 </button>
-                <div class="absolute hidden group-hover:block w-48 py-2 mt-2 bg-white rounded-md shadow-xl">
-                  {item.children.map(child => (
-                    <a
-                      href={child.path}
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      {child.title}
-                    </a>
-                  ))}
+                {/* Dropdown container with larger hit area */}
+                <div class="absolute left-0 pt-2 w-max">
+                  {/* Invisible area to prevent gap between button and dropdown */}
+                  <div class="invisible h-2 -mt-2"></div>
+                  {/* Actual dropdown content */}
+                  <div class="hidden group-hover:block bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                    {item.children.map(child => (
+                      <a
+                        href={child.path}
+                        class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap transition-colors duration-150"
+                      >
+                        {child.title}
+                      </a>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </>
             ) : (
               <a
                 href={item.path}
@@ -123,7 +133,7 @@ const navItems: NavItem[] = [
           href="https://instagram.com"
           target="_blank"
           rel="noopener noreferrer"
-          class="text-gray-700 hover:text-gray-900"
+          class="text-gray-700 hover:text-gray-900 transition-colors duration-150"
         >
           <Icon name="mdi:instagram" class="w-6 h-6" />
         </a>
@@ -147,7 +157,7 @@ const navItems: NavItem[] = [
 
   <!-- Mobile menu -->
   <div id="mobile-menu" class="hidden md:hidden">
-    <div class="px-2 pt-2 pb-3 space-y-1 bg-white/80 backdrop-blur-md">
+    <div class="px-2 pt-2 pb-3 space-y-1 bg-white/80 backdrop-blur-md border-t border-gray-200">
       {navItems.map(item => (
         <div>
           {item.children ? (
@@ -158,7 +168,7 @@ const navItems: NavItem[] = [
                 {item.title}
                 <Icon name="mdi:chevron-down" class="chevron-icon w-5 h-5 transform transition-transform duration-200" />
               </button>
-              <div class="hidden pl-4">
+              <div class="hidden pl-4 space-y-1">
                 {item.children.map(child => (
                   <a
                     href={child.path}
