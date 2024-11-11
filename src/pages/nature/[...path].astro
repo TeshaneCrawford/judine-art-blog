@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/GalleryLayout.astro';
 import { getFolderContents } from '../../utils/lib/cloudinary';
-import { Image } from "@unpic/astro";
+import { Image } from '@unpic/astro';
 
 const { path = '' } = Astro.params;
 const decodedPath = decodeURIComponent(path || '');
@@ -12,12 +12,14 @@ const pathParts = decodedPath ? decodedPath.split('/') : [];
 const breadcrumbs = pathParts.map((part, index) => ({
   name: part,
   path: `/${pathParts.slice(0, index + 1).join('/')}`,
-  isLast: index === pathParts.length - 1
+  isLast: index === pathParts.length - 1,
 }));
 
-const pageTitle = pathParts.length > 0 
-  ? pathParts[pathParts.length - 1].charAt(0).toUpperCase() + pathParts[pathParts.length - 1].slice(1)
-  : 'Nature';
+const pageTitle =
+  pathParts.length > 0
+    ? pathParts[pathParts.length - 1].charAt(0).toUpperCase() +
+      pathParts[pathParts.length - 1].slice(1)
+    : 'Nature';
 
 const validCategories = ['Winter', 'Fall', 'Summer', 'Spring', 'Sunsets'];
 const category = pathParts[0];
@@ -27,53 +29,56 @@ if (decodedPath && !validCategories.includes(category)) {
 ---
 
 <Layout title={pageTitle}>
-    <!-- Breadcrumb Navigation -->
-    <nav class="mb-6 flex items-center space-x-2 text-gray-600">
-      <a href="/nature" class="hover:text-blue-600 transition-colors">
-        Nature
-      </a>
-      {breadcrumbs.map((crumb, index) => (
+  <!-- Breadcrumb Navigation -->
+  <nav class='mb-6 flex items-center space-x-2 text-gray-600'>
+    <a href='/nature' class='hover:text-blue-600 transition-colors'> Nature </a>
+    {
+      breadcrumbs.map((crumb, index) => (
         <>
           <span>/</span>
-          <a 
+          <a
             href={`/nature${crumb.path}`}
             class:list={[
-              "hover:text-blue-600 transition-colors",
-              { "font-semibold text-gray-900": index === breadcrumbs.length - 1 }
+              'hover:text-blue-600 transition-colors',
+              {
+                'font-semibold text-gray-900': index === breadcrumbs.length - 1,
+              },
             ]}
           >
             {crumb.name}
           </a>
         </>
-      ))}
-    </nav>
+      ))
+    }
+  </nav>
 
-    <!-- Folders Grid -->
-    {folders.length > 0 && (
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Folders</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+  <!-- Folders Grid -->
+  {
+    folders.length > 0 && (
+      <section class='mb-12'>
+        <h2 class='text-2xl font-bold mb-6'>Folders</h2>
+        <div class='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4'>
           {folders.map((folder) => (
             <a
               href={`/nature/${folder.path}`}
-              class="group block p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all"
+              class='group block p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all'
             >
-              <div class="flex items-center space-x-3">
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  class="h-8 w-8 text-yellow-500 group-hover:text-yellow-600 transition-colors" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
+              <div class='flex items-center space-x-3'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  class='h-8 w-8 text-yellow-500 group-hover:text-yellow-600 transition-colors'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  stroke='currentColor'
                 >
-                  <path 
-                    stroke-linecap="round" 
-                    stroke-linejoin="round" 
-                    stroke-width="2" 
-                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" 
+                  <path
+                    stroke-linecap='round'
+                    stroke-linejoin='round'
+                    stroke-width='2'
+                    d='M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z'
                   />
                 </svg>
-                <span class="font-medium text-gray-900 group-hover:text-gray-600 transition-colors">
+                <span class='font-medium text-gray-900 group-hover:text-gray-600 transition-colors'>
                   {folder.name}
                 </span>
               </div>
@@ -81,36 +86,46 @@ if (decodedPath && !validCategories.includes(category)) {
           ))}
         </div>
       </section>
-    )}
+    )
+  }
 
-    <!-- Images Grid -->
-    {images.length > 0 ? (
+  <!-- Images Grid -->
+  {
+    images.length > 0 ? (
       <section>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <div class='grid grid-cols-2 sm:grid-cols-3 gap-2'>
           {images.map((image) => (
-            <div class="group relative aspect-auto overflow-hidden rounded-sm bg-gray-100">
+            <div class='group relative aspect-auto overflow-hidden rounded-sm bg-gray-100'>
               <Image
                 src={image.url}
                 alt={image.public_id.split('/').pop() || 'Gallery image'}
-                class="object-cover w-full h-full transform group-hover:scale-10 transition-transform duration-300"
-                loading="lazy"
+                class='object-cover w-full h-full transform group-hover:scale-10 transition-transform duration-300'
+                loading='lazy'
               />
-              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300"></div>
+              <div class='absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300' />
             </div>
           ))}
         </div>
       </section>
-    ) : (!folders.length) && (
-      <div class="text-center py-12">
-        <p class="text-gray-500 text-lg">No images found in this folder.</p>
-      </div>
-    )}
+    ) : (
+      !folders.length && (
+        <div class='text-center py-12'>
+          <p class='text-gray-500 text-lg'>No images found in this folder.</p>
+        </div>
+      )
+    )
+  }
 
-    <!-- Loading State -->
-    <div id="loading" class="hidden fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center">
-      <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+  <!-- Loading State -->
+  <div
+    id='loading'
+    class='hidden fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center'
+  >
+    <div
+      class='animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent'
+    >
     </div>
-
+  </div>
 </Layout>
 
 <script>

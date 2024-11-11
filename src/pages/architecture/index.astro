@@ -1,14 +1,16 @@
 ---
 import Layout from '../../layouts/GalleryLayout.astro';
 import { getFolderContents, getImages } from '../../utils/lib/cloudinary';
-import { Image } from "@unpic/astro";
+import { Image } from '@unpic/astro';
 
 // Get root level contents
 const { folders, images } = await getFolderContents();
 
 // Specify which folders you want to show (add or remove folder names as needed)
 const allowedFolders = ['Interiors', 'Exteriors'];
-const filteredFolders = folders.filter(folder => allowedFolders.includes(folder.name));
+const filteredFolders = folders.filter((folder) =>
+  allowedFolders.includes(folder.name)
+);
 
 // Get a preview image for each folder
 const folderPreviews = await Promise.all(
@@ -16,7 +18,7 @@ const folderPreviews = await Promise.all(
     const folderImages = await getImages(folder.path);
     return {
       ...folder,
-      previewImage: folderImages[0]?.url || null // Get first image as preview
+      previewImage: folderImages[0]?.url || null, // Get first image as preview
     };
   })
 );
@@ -77,31 +79,32 @@ const folderPreviews = await Promise.all(
   }
 </style>
 
-<Layout title="Gallery">
-    <!-- Full-width Folders with Preview Images -->
-    {folderPreviews.length > 0 && (
-      <section class="mb-12 space-y-4">
+<Layout title='Gallery'>
+  <!-- Full-width Folders with Preview Images -->
+  {
+    folderPreviews.length > 0 && (
+      <section class='mb-12 space-y-4'>
         {folderPreviews.map((folder) => (
           <a
             href={`/photos/${folder.path}`}
-            class="block w-full relative h-[32rem] rounded-sm overflow-hidden group"
+            class='block w-full relative h-[32rem] rounded-sm overflow-hidden group'
           >
             {folder.previewImage ? (
               <Image
                 src={folder.previewImage}
                 alt={`Preview of ${folder.name}`}
-                class="absolute inset-0 w-full h-full object-cover brightness-50 group-hover:brightness-75 duration-300"
+                class='absolute inset-0 w-full h-full object-cover brightness-50 group-hover:brightness-75 duration-300'
               />
             ) : (
-              <div class="absolute inset-0 bg-gray-200 group-hover:bg-gray-300 transition-colors duration-300" />
+              <div class='absolute inset-0 bg-gray-200 group-hover:bg-gray-300 transition-colors duration-300' />
             )}
-            
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="text-center">
-                <span class="folder-name text-lg font-semibold text-white transition-transform duration-300 block">
+
+            <div class='absolute inset-0 flex items-center justify-center'>
+              <div class='text-center'>
+                <span class='folder-name text-lg font-semibold text-white transition-transform duration-300 block'>
                   {folder.name.charAt(0).toUpperCase() + folder.name.slice(1)}
                 </span>
-                <span class="text-sm text-gray-200 mt-2 block animated-underline">
+                <span class='text-sm text-gray-200 mt-2 block animated-underline'>
                   View Album
                 </span>
               </div>
@@ -109,30 +112,33 @@ const folderPreviews = await Promise.all(
           </a>
         ))}
       </section>
-    )}
-    
-    <!-- Recent Images Preview -->
-    {images.length > 0 && (
+    )
+  }
+
+  <!-- Recent Images Preview -->
+  {
+    images.length > 0 && (
       <section>
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold">Recent Images</h2>
-          <span class="text-sm text-gray-500">
+        <div class='flex justify-between items-center mb-6'>
+          <h2 class='text-2xl font-bold'>Recent Images</h2>
+          <span class='text-sm text-gray-500'>
             Showing {Math.min(images.length, 12)} of {images.length}
           </span>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div class='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4'>
           {images.slice(0, 12).map((image) => (
-            <div class="group relative overflow-hidden rounded-sm bg-gray-100">
+            <div class='group relative overflow-hidden rounded-sm bg-gray-100'>
               <Image
                 src={image.url}
                 alt={image.public_id.split('/').pop()}
-                class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-300"
-                loading="lazy"
+                class='object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-300'
+                loading='lazy'
               />
-              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300" />
+              <div class='absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300' />
             </div>
           ))}
         </div>
       </section>
-    )}
+    )
+  }
 </Layout>
