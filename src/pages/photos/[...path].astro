@@ -1,0 +1,188 @@
+---
+import Layout from '../../layouts/GalleryLayout.astro';
+import { getFolderContents } from '../../utils/lib/cloudinary';
+import { Image } from "@unpic/astro";
+
+import type { ImageResource, FolderResource } from '../../utils/lib/cloudinary';
+
+const validCategories = ['Nature', 'Interiors', 'Architecture'];
+
+interface StaticPath {
+  params: { path: string | undefined };
+  props: {
+    folders: FolderResource[];
+    images: ImageResource[];
+    category?: string;
+  };
+}
+
+export async function getStaticPaths(): Promise<StaticPath[]> {
+  // Get all possible folder paths recursively
+  async function getAllPaths(currentPath: string = ''): Promise<StaticPath[]> {
+    const { folders, images } = await getFolderContents(currentPath);
+    let paths: StaticPath[] = [];
+    
+      // Get the top-level category from the path
+      const category = currentPath.split('/')[0];
+
+    // Add current path if it has content (either folders or images)
+    // Only process paths that start with valid categories
+    if (!currentPath || validCategories.includes(category)) {
+      paths.push({
+        params: { path: currentPath || undefined },
+        props: { folders, images, category }
+      });
+      
+      // Recursively get paths for all subfolders
+      for (const folder of folders) {
+        const subPaths = await getAllPaths(folder.path);
+        paths = [...paths, ...subPaths];
+      }
+    }
+    
+    return paths;
+  }
+  
+  return await getAllPaths();
+}
+
+// Get the props from getStaticPaths
+const { folders, images } = Astro.props;
+const { path = '' } = Astro.params;
+const decodedPath = decodeURIComponent(path || '');
+
+// Create breadcrumb navigation
+const pathParts = decodedPath ? decodedPath.split('/') : [];
+const breadcrumbs = pathParts.map((part, index) => ({
+  name: part,
+  path: `/${pathParts.slice(0, index + 1).join('/')}`,
+  isLast: index === pathParts.length - 1
+}));
+
+// Get page title based on current path
+const pageTitle = pathParts.length > 0 
+  ? pathParts[pathParts.length - 1].charAt(0).toUpperCase() + pathParts[pathParts.length - 1].slice(1)
+  : 'Photos';
+---
+
+<Layout title={pageTitle}>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb Navigation -->
+    <nav class="mb-6 flex items-center space-x-2 text-gray-600">
+      <a href="/photos" class="hover:text-blue-600 transition-colors">
+        Photos
+      </a>
+      {breadcrumbs.map((crumb, index) => (
+        <>
+          <span>/</span>
+          <a 
+            href={`/photos/${crumb.path}`}
+            class:list={[
+              "hover:text-blue-600 transition-colors",
+              { "font-semibold text-gray-900": index === breadcrumbs.length - 1 }
+            ]}
+          >
+            {crumb.name}
+          </a>
+        </>
+      ))}
+    </nav>
+
+    <!-- Folders Grid -->
+    {folders.length > 0 && (
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Folders</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {folders.map((folder) => (
+            <a
+              href={`/photos/${folder.path}`}
+              class="group block p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all"
+            >
+              <div class="flex items-center space-x-3">
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  class="h-8 w-8 text-yellow-500 group-hover:text-yellow-600 transition-colors" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round" 
+                    stroke-width="2" 
+                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" 
+                  />
+                </svg>
+                <span class="font-medium text-gray-900 group-hover:text-gray-600 transition-colors">
+                  {folder.name}
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Images Grid -->
+    {images.length > 0 ? (
+      <section>
+        <h2 class="text-2xl font-bold mb-6">Images</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {images.map((image) => (
+            <div class="group relative aspect-square overflow-hidden rounded-lg bg-gray-100">
+              <Image
+                src={image.url}
+                alt={image.public_id.split('/').pop()}
+                class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300"></div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ) : !folders.length && (
+      <div class="text-center py-12">
+        <p class="text-gray-500 text-lg">No images found in this folder.</p>
+      </div>
+    )}
+
+    <!-- Loading State -->
+    <div id="loading" class="hidden fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // Show loading state during navigation
+  document.addEventListener('astro:before-preparation', () => {
+    document.getElementById('loading')?.classList.remove('hidden');
+  });
+
+  document.addEventListener('astro:after-preparation', () => {
+    document.getElementById('loading')?.classList.add('hidden');
+  });
+</script>
+
+<style>
+  /* Optional: Add smooth scrolling for the whole page */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Optional: Add fade-in animation for images */
+  .image-grid img {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>
