@@ -26,12 +26,18 @@ const category = pathParts[0];
 if (decodedPath && !validCategories.includes(category)) {
   return Astro.redirect('/404');
 }
+
+// Distribute images into columns
+const columnCount = 3;
+const columns = Array.from({ length: columnCount }, (_, i) =>
+  images.filter((_, index) => index % columnCount === i)
+);
 ---
 
 <Layout title={pageTitle}>
   <!-- Breadcrumb Navigation -->
   <nav class='mb-6 flex items-center space-x-2 text-gray-600'>
-    <a href='/nature' class='hover:text-blue-600 transition-colors'> Nature </a>
+    <a href='/nature' class='hover:text-gray-600 transition-colors'> Nature </a>
     {
       breadcrumbs.map((crumb, index) => (
         <>
@@ -39,7 +45,7 @@ if (decodedPath && !validCategories.includes(category)) {
           <a
             href={`/nature${crumb.path}`}
             class:list={[
-              'hover:text-blue-600 transition-colors',
+              'hover:text-gray-600 transition-colors',
               {
                 'font-semibold text-gray-900': index === breadcrumbs.length - 1,
               },
@@ -89,20 +95,25 @@ if (decodedPath && !validCategories.includes(category)) {
     )
   }
 
-  <!-- Images Grid -->
+  <!-- Masonry Images Grid -->
   {
     images.length > 0 ? (
-      <section>
-        <div class='grid grid-cols-2 sm:grid-cols-3 gap-2'>
-          {images.map((image) => (
-            <div class='group relative aspect-auto overflow-hidden rounded-sm bg-gray-100'>
-              <Image
-                src={image.url}
-                alt={image.public_id.split('/').pop() || 'Gallery image'}
-                class='object-cover w-full h-full transform group-hover:scale-10 transition-transform duration-300'
-                loading='lazy'
-              />
-              <div class='absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300' />
+      <section class='mx-auto'>
+        <div class='grid grid-cols-2 sm:grid-cols-3 gap-4'>
+          {columns.map((column) => (
+            <div class='flex flex-col gap-4'>
+              {column.map((image) => (
+                <div class='group relative overflow-hidden rounded-sm bg-gray-100'>
+                  <Image
+                    src={image.url}
+                    alt={image.public_id.split('/').pop() || 'Gallery image'}
+                    class='w-full h-auto object-cover transition-transform duration-300 group-hover:scale-10'
+                    loading='lazy'
+                    layout='fullWidth'
+                  />
+                  <div class='absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300' />
+                </div>
+              ))}
             </div>
           ))}
         </div>
@@ -122,7 +133,7 @@ if (decodedPath && !validCategories.includes(category)) {
     class='hidden fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center'
   >
     <div
-      class='animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent'
+      class='animate-spin rounded-full h-12 w-12 border-4 border-gray-500 border-t-transparent'
     >
     </div>
   </div>
@@ -137,6 +148,18 @@ if (decodedPath && !validCategories.includes(category)) {
   document.addEventListener('astro:after-preparation', () => {
     document.getElementById('loading')?.classList.add('hidden');
   });
+
+  // Optional: Add fade-in animation for images as they load
+  document.addEventListener('astro:page-load', () => {
+    const images = document.querySelectorAll('img');
+    images.forEach((img) => {
+      img.classList.add('opacity-0');
+      img.addEventListener('load', () => {
+        img.classList.remove('opacity-0');
+        img.classList.add('opacity-100');
+      });
+    });
+  });
 </script>
 
 <style>
@@ -144,17 +167,7 @@ if (decodedPath && !validCategories.includes(category)) {
     scroll-behavior: smooth;
   }
 
-  .image-grid img {
-    opacity: 0;
-    animation: fadeIn 0.5s ease-in forwards;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  img {
+    transition: opacity 0.5s ease-in-out;
   }
 </style>
