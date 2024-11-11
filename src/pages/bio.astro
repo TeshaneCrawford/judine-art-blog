@@ -9,8 +9,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
   description={SITE_DESCRIPTION}
 >
   <div class="bio-container">
-    <div class="bio-content">
-      <h1>About Me</h1>
+    <div class="bio-content mt-12">
+      <!-- <h1 class="text-xl font-bold">About Me</h1> -->
       <p>
         Judine Fiddler is a Jamaican-born artist currently based in New York. With an undergraduate 
         degree from New York University, where she studied both Psychology and Studio Art, Fiddler 
@@ -30,10 +30,24 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
       of the complexity and richness of human emotions and experiences, making her work 
       thought-provoking and impactful.
 	  </p>
-      <div class="social-links">
-        <a href="https://www.instagram.com/judinefiddler" target="_blank" rel="noopener noreferrer">Instagram</a>
-        <a href="https://www.instagram.com/judinefiddler/" target="_blank" rel="noopener noreferrer">Twitter</a>
-      </div>
+    <div class="mt-8">
+      <a 
+        href="https://www.instagram.com/judinefiddler" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-block mr-4 text-gray-800 underline decoration-wavy underline-offset-4 decoration-gray-800 hover:decoration-solid"
+      >
+        Instagram
+      </a>
+      <a 
+        href="https://www.instagram.com/judinefiddler/" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-block mr-4 text-gray-800 underline decoration-wavy underline-offset-4 decoration-gray-800 hover:decoration-solid"
+      >
+        Twitter
+      </a>
+    </div>
     </div>
     <div class="bio-photo">
       <BioPhoto folder="Biography" />
@@ -46,7 +60,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
     display: flex;
     flex-direction: column-reverse;
     gap: 2rem;
-    max-width: 1200px;
     margin: 0 auto;
   }
 
@@ -68,21 +81,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
   p {
     line-height: 1.6;
     margin-bottom: 1.5rem;
-  }
-
-  .social-links {
-    margin-top: 2rem;
-  }
-
-  .social-links a {
-    display: inline-block;
-    margin-right: 1rem;
-    color: #333;
-  }
-
-  .social-links a:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
   }
 
   @media (min-width: 768px) {
