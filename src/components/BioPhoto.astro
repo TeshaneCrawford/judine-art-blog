@@ -1,0 +1,48 @@
+---
+import { Image } from '@unpic/astro'
+import { getImages } from '../utils/lib/cloudinary';
+
+interface Props {
+  folder?: string;
+}
+
+const { folder } = Astro.props;
+
+let images: Awaited<ReturnType<typeof getImages>> = [];
+let error: string | null = null;
+
+try {
+  images = await getImages(folder);
+} catch (e) {
+  error = e instanceof Error ? e.message : 'An unknown error occurred';
+}
+
+---
+<div class="about-photo">
+
+    {error ? (
+        <p class="error">{error}</p>
+      ) : (
+        <div>
+          {images.map((image) => (
+            <Image 
+              src={image.url}
+              alt={`Image ${image.public_id}`}
+              width={image.width}
+              height={image.height}
+              loading="lazy"
+            />
+          ))}
+        </div>
+      )}
+</div>
+
+<style>
+    .about-photo {
+        margin: auto 0;
+        border: 8px solid #fff;
+        background-color: #fff;
+        box-shadow: 0 0 20px 1px rgb(202, 202, 202, 0.5);
+        transition: transform 0.5s cubic-bezier(0.36, 0.07, 0.25, 1);
+    }
+</style>

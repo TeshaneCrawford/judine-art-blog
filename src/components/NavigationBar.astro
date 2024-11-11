@@ -13,12 +13,14 @@ interface NavItem {
 const navItems: NavItem[] = [
   { title: 'Home', path: '/' },
   {
-    title: 'Photos',
-    path: '/photos',
+    title: 'Nature',
+    path: '/nature',
     children: [
-      { title: 'Nature', path: '/photos/Nature' },
-      { title: 'Interiors', path: '/photos/Interiors' },
-      { title: 'Architecture', path: '/photos/Architecture' }
+      { title: 'Winter', path: '/nature/Winter' },
+      { title: 'Fall', path: '/nature/Fall' },
+      { title: 'Summer', path: '/nature/Summer' },
+      { title: 'Spring', path: '/nature/Spring' },
+      { title: 'Sunsets', path: '/nature/Sunsets' },
     ]
   },
   {
@@ -26,8 +28,16 @@ const navItems: NavItem[] = [
     path: '/travels',
     children: [
       { title: 'Caribbean', path: '/travels/Caribbean' },
-      { title: 'USA', path: '/travels/Usa' },
+      { title: 'USA', path: '/travels/United States' },
       { title: 'Europe', path: '/travels/Europe' }
+    ]
+  },
+  {
+    title: 'Architecture',
+    path: '/architecture',
+    children: [
+      { title: 'Interiors', path: '/architecture/Interiors' },
+      { title: 'Exteriors', path: '/architecture/Exteriors' }
     ]
   },
   { title: 'Bio', path: '/bio' }
@@ -81,7 +91,7 @@ const currentPath = Astro.url.pathname;
   id="navbar"
   class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/80 backdrop-blur-md"
 >
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
       <div class="flex-shrink-0">

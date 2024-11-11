@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/AppLayout.astro';
+import BioPhoto from '../components/BioPhoto.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+---
+
+<Layout
+  title= `Bio - ${SITE_TITLE}`
+  description={SITE_DESCRIPTION}
+>
+  <div class="bio-container">
+    <div class="bio-content">
+      <h1>About Me</h1>
+      <p>
+        Judine Fiddler is a Jamaican-born artist currently based in New York. With an undergraduate 
+        degree from New York University, where she studied both Psychology and Studio Art, Fiddler 
+        brings a unique perspective to her work. Her artistic mediums include acrylic paint, 
+        watercolors, and charcoal on paper or canvas.
+      </p>
+      <p>
+        Fiddler's work primarily portrays black figures, sourced from real life, images, and 
+        imagination. Her figurative portraits and mixed media paintings are influenced by abstract 
+        expressionism and incorporate her knowledge of psychology and human behavior to capture 
+        emotional conflict and resilience.
+      </p>
+	  <p>
+      Fiddler frequently draws inspiration from her own memories and childhood experiences to reflect 
+      the vagaries of time and recollection. Her paintings often feature a range of settings including 
+      landscapes and architecture that suggest both cohesion and chaos. Her artistic style is reflective
+      of the complexity and richness of human emotions and experiences, making her work 
+      thought-provoking and impactful.
+	  </p>
+      <div class="social-links">
+        <a href="https://www.instagram.com/judinefiddler" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://www.instagram.com/judinefiddler/" target="_blank" rel="noopener noreferrer">Twitter</a>
+      </div>
+    </div>
+    <div class="bio-photo">
+      <BioPhoto folder="Biography" />
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .bio-container {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .bio-content {
+    flex: 1;
+  }
+
+  .bio-photo {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h1 {
+    margin-bottom: 1.5rem;
+  }
+
+  p {
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .social-links {
+    margin-top: 2rem;
+  }
+
+  .social-links a {
+    display: inline-block;
+    margin-right: 1rem;
+    color: #333;
+  }
+
+  .social-links a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (min-width: 768px) {
+    .bio-container {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .bio-content {
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .bio-container {
+      gap: 4rem;
+    }
+
+    .bio-content {
+      padding-right: 4rem;
+    }
+  }
+</style>

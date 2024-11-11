@@ -1,19 +1,8 @@
 ---
-import NavigationBar from "../components/NavigationBar.astro"
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import AppLayout from '../layouts/AppLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Judine Fiddler</title>
-	</head>
-	<body>
-		<NavigationBar />
-		<main class="max-w-8xl mx-auto px-4 sm:px-6 pt-16">
-			<h1>Astro</h1>
-		</main>
-	</body>
-</html>
+<AppLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+    <h1>Astro</h1>
+</AppLayout>
