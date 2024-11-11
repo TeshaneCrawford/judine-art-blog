@@ -7,7 +7,7 @@ import { Image } from "@unpic/astro";
 const { folders, images } = await getFolderContents();
 
 // Specify which folders you want to show (add or remove folder names as needed)
-const allowedFolders = ['Nature', 'Interiors', 'Architecture'];
+const allowedFolders = ['Caribbean', 'USA', 'Europe'];
 const filteredFolders = folders.filter(folder => allowedFolders.includes(folder.name));
 
 // Get a preview image for each folder

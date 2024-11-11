@@ -19,7 +19,7 @@ const pageTitle = pathParts.length > 0
   ? pathParts[pathParts.length - 1].charAt(0).toUpperCase() + pathParts[pathParts.length - 1].slice(1)
   : 'Photos';
 
-const validCategories = ['Nature', 'Interiors', 'Architecture'];
+const validCategories = ['Caribbean', 'USA', 'Europe'];
 const category = pathParts[0];
 if (decodedPath && !validCategories.includes(category)) {
   return Astro.redirect('/404');
