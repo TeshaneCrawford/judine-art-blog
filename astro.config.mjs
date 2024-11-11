@@ -7,6 +7,7 @@ import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import { imageService } from "@unpic/astro/service";
 
+// @ts-ignore
 import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
