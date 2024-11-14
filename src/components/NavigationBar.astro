@@ -95,7 +95,7 @@ const currentPath = Astro.url.pathname;
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
       <div class="flex-shrink-0">
-        <a href="/" class="text-2xl font-bold text-gray-800">Judine</a>
+        <a href="/" class="text-2xl font-bold text-neutral-800">Judine</a>
       </div>
 
       <!-- Desktop Navigation -->
@@ -105,7 +105,7 @@ const currentPath = Astro.url.pathname;
             {item.children ? (
               <>
                 <button 
-                  class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-gray-900 cursor-pointer"
+                  class="inline-flex items-center px-1 pt-1 text-sm font-medium text-neutral-700 hover:text-neutral-900 cursor-pointer"
                 >
                   {item.title}
                   <Icon name="mdi:chevron-down" class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" />
@@ -115,11 +115,11 @@ const currentPath = Astro.url.pathname;
                   {/* Invisible area to prevent gap between button and dropdown */}
                   <div class="invisible h-2 -mt-2"></div>
                   {/* Actual dropdown content */}
-                  <div class="hidden group-hover:block bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                  <div class="hidden group-hover:block bg-white/80 backdrop-blur-md rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                     {item.children.map(child => (
                       <a
                         href={child.path}
-                        class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap transition-colors duration-150"
+                        class="block px-4 py-3 text-sm text-neutral-700 hover:bg-neutral-100 whitespace-nowrap transition-colors duration-150"
                       >
                         {child.title}
                       </a>
@@ -130,7 +130,7 @@ const currentPath = Astro.url.pathname;
             ) : (
               <a
                 href={item.path}
-                class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-gray-900"
+                class="inline-flex items-center px-1 pt-1 text-sm font-medium text-neutral-700 hover:text-neutral-900"
               >
                 {item.title}
               </a>
@@ -143,7 +143,7 @@ const currentPath = Astro.url.pathname;
           href="https://instagram.com"
           target="_blank"
           rel="noopener noreferrer"
-          class="text-gray-700 hover:text-gray-900 transition-colors duration-150"
+          class="text-neutral-700 hover:text-neutral-900 transition-colors duration-150"
         >
           <Icon name="mdi:instagram" class="w-6 h-6" />
         </a>
@@ -154,7 +154,7 @@ const currentPath = Astro.url.pathname;
         <button
           id="mobile-menu-btn"
           type="button"
-          class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+          class="inline-flex items-center justify-center p-2 rounded-md text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100"
           aria-controls="mobile-menu"
           aria-expanded="false"
         >
@@ -167,13 +167,13 @@ const currentPath = Astro.url.pathname;
 
   <!-- Mobile menu -->
   <div id="mobile-menu" class="hidden md:hidden">
-    <div class="px-2 pt-2 pb-3 space-y-1 bg-white/80 backdrop-blur-md border-t border-gray-200">
+    <div class="px-2 pt-2 pb-3 space-y-1 bg-white/80 backdrop-blur-md border-t border-neutral-200">
       {navItems.map(item => (
         <div>
           {item.children ? (
             <div>
               <button
-                class="dropdown-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                class="dropdown-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100"
               >
                 {item.title}
                 <Icon name="mdi:chevron-down" class="chevron-icon w-5 h-5 transform transition-transform duration-200" />
@@ -182,7 +182,7 @@ const currentPath = Astro.url.pathname;
                 {item.children.map(child => (
                   <a
                     href={child.path}
-                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100"
                   >
                     {child.title}
                   </a>
@@ -192,7 +192,7 @@ const currentPath = Astro.url.pathname;
           ) : (
             <a
               href={item.path}
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+              class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100"
             >
               {item.title}
             </a>
@@ -205,7 +205,7 @@ const currentPath = Astro.url.pathname;
         href="https://instagram.com"
         target="_blank"
         rel="noopener noreferrer"
-        class="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+        class="flex items-center px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100"
       >
         <Icon name="mdi:instagram" class="w-6 h-6 mr-2" />
         Instagram
