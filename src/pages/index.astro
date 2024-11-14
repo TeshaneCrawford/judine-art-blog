@@ -1,8 +1,67 @@
 ---
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import AppLayout from '../layouts/AppLayout.astro';
+import { getImages } from '../utils/lib/cloudinary';
+import { Image } from '@unpic/astro';
+
+// Get one representative image from each folder
+const natureImages = await getImages('nature');
+const travelImages = await getImages('europe');
+const architectureImages = await getImages('architecture');
+
+// Get the first image from each category, or use a default if none exists
+const natureImage = natureImages[0]?.url || 'https://placeholder.com/1200x800';
+const travelImage = travelImages[0]?.url || 'https://placeholder.com/1200x800';
+const architectureImage = architectureImages[0]?.url || 'https://placeholder.com/1200x800';
 ---
 
 <AppLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-  <h1>Astro</h1>
+    <!-- <h1 class="text-4xl font-bold text-center mb-12">Photography Portfolio</h1> -->
+    
+    <div class="space-y-8">
+      <!-- Nature Section -->
+      <div class="relative">
+        <Image
+          src={natureImage} 
+          alt="Nature Photography"
+          class="w-full h-[32rem] object-cover rounded-sm shadow-lg"
+        />
+        <a 
+          href="/nature" 
+          class="absolute bottom-4 left-4 bg-black/80 bg-opacity-50 text-white px-6 py-2 rounded-sm hover:bg-opacity-70 transition-all duration-300 text-xl font-semibold"
+        >
+          Nature
+        </a>
+      </div>
+
+      <!-- Travel Section -->
+      <div class="relative">
+        <Image
+          src={travelImage} 
+          alt="Travel Photography"
+          class="w-full h-[32rem] object-cover rounded-sm shadow-lg"
+        />
+        <a 
+          href="/travels" 
+          class="absolute bottom-4 left-4 bg-black/80 bg-opacity-50 text-white px-6 py-2 rounded-sm hover:bg-opacity-70 transition-all duration-300 text-xl font-semibold"
+        >
+          Travels
+        </a>
+      </div>
+
+      <!-- Architecture Section -->
+      <div class="relative">
+        <Image
+          src={architectureImage} 
+          alt="Architecture Photography"
+          class="w-full h-[32rem] object-cover rounded-sm shadow-lg"
+        />
+        <a 
+          href="/architecture" 
+          class="absolute bottom-4 left-4 bg-black/80 bg-opacity-50 text-white px-6 py-2 rounded-sm hover:bg-opacity-70 transition-all duration-300 text-xl font-semibold"
+        >
+          Architecture
+        </a>
+      </div>
+    </div>
 </AppLayout>
