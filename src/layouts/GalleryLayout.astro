@@ -9,10 +9,18 @@ const { title, description } = Astro.props;
 <html lang='en'>
   <head>
     <BaseMeta title={title} description={description} />
+    <script>
+      // Check for system dark mode preference
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme === 'dark' || (!storedTheme && isDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
     <style></style>
   </head>
 
-  <body>
+  <body class="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white transition-colors duration-300">
     <Header />
     <main class='max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-16'>
       <div>
