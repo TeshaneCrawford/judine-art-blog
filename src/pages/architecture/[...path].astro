@@ -37,8 +37,8 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
 <Layout title={pageTitle}>
   <main class='max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
     <!-- Breadcrumb Navigation -->
-    <nav class='mb-6 flex items-center space-x-2 text-gray-600'>
-      <a href='/architecture' class='hover:text-gray-600 transition-colors'>
+    <nav class='mb-6 flex items-center space-x-2 text-gray-600 dark:text-gray-400'>
+      <a href='/architecture' class='hover:text-gray-600 dark:hover:text-gray-300 transition-colors'>
         Architecture
       </a>
       {
@@ -48,9 +48,9 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
             <a
               href={`/architecture${crumb.path}`}
               class:list={[
-                'hover:text-gray-600 transition-colors',
+                'hover:text-gray-600 dark:hover:text-gray-300 transition-colors',
                 {
-                  'font-semibold text-gray-900':
+                  'font-semibold text-gray-900 dark:text-gray-100':
                     index === breadcrumbs.length - 1,
                 },
               ]}
@@ -66,17 +66,17 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
     {
       folders.length > 0 && (
         <section class='mb-12'>
-          <h2 class='text-2xl font-bold mb-6'>Folders</h2>
+          <h2 class='text-2xl font-bold mb-6 dark:text-gray-100'>Folders</h2>
           <div class='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4'>
             {folders.map((folder) => (
               <a
                 href={`/architecture/${folder.path}`}
-                class='group block p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all'
+                class='group block p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all'
               >
                 <div class='flex items-center space-x-3'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
-                    class='h-8 w-8 text-yellow-500 group-hover:text-yellow-600 transition-colors'
+                    class='h-8 w-8 text-yellow-500 group-hover:text-yellow-600 dark:text-yellow-400 dark:group-hover:text-yellow-300 transition-colors'
                     fill='none'
                     viewBox='0 0 24 24'
                     stroke='currentColor'
@@ -88,7 +88,7 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
                       d='M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z'
                     />
                   </svg>
-                  <span class='font-medium text-gray-900 group-hover:text-gray-600 transition-colors'>
+                  <span class='font-medium text-gray-900 dark:text-gray-100 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors'>
                     {folder.name}
                   </span>
                 </div>
@@ -125,7 +125,7 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
       ) : (
         !folders.length && (
           <div class='text-center py-12'>
-            <p class='text-gray-500 text-lg'>No images found in this folder.</p>
+            <p class='text-gray-500 dark:text-gray-400 text-lg'>No images found in this folder.</p>
           </div>
         )
       )
@@ -134,10 +134,10 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
     <!-- Loading State -->
     <div
       id='loading'
-      class='hidden fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center'
+      class='hidden fixed inset-0 bg-white dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 flex items-center justify-center'
     >
       <div
-        class='animate-spin rounded-full h-12 w-12 border-4 border-gray-500 border-t-transparent'
+        class='animate-spin rounded-full h-12 w-12 border-4 border-gray-500 dark:border-gray-400 border-t-transparent'
       >
       </div>
     </div>

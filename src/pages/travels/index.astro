@@ -121,20 +121,20 @@ const folderPreviews = await Promise.all(
       <section>
         <div class='flex justify-between items-center mb-6'>
           <h2 class='text-2xl font-bold'>Recent Images</h2>
-          <span class='text-sm text-gray-500'>
+          <span class='text-sm text-gray-500 dark:text-gray-400'>
             Showing {Math.min(images.length, 12)} of {images.length}
           </span>
         </div>
         <div class='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4'>
           {images.slice(0, 12).map((image) => (
-            <div class='group relative overflow-hidden rounded-sm bg-gray-100'>
+            <div class='group relative overflow-hidden rounded-sm bg-gray-100 dark:bg-gray-800'>
               <Image
                 src={image.url}
                 alt={image.public_id.split('/').pop()}
                 class='object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-300'
                 loading='lazy'
               />
-              <div class='absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300' />
+              <div class='absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 dark:group-hover:bg-opacity-40 transition-opacity duration-300' />
             </div>
           ))}
         </div>
