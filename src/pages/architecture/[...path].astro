@@ -17,9 +17,9 @@ const breadcrumbs = pathParts.map((part, index) => ({
 
 const pageTitle =
   pathParts.length > 0
-    ? pathParts[pathParts.length - 1].charAt(0).toUpperCase() +
-      pathParts[pathParts.length - 1].slice(1)
-    : 'Architecture';
+    ? `${pathParts[pathParts.length - 1].charAt(0).toUpperCase() +
+      pathParts[pathParts.length - 1].slice(1)} | Judine Art`
+    : 'Architecture | Judine Art';
 
 const validCategories = ['Interiors', 'Exteriors'];
 const category = pathParts[0];

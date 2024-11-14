@@ -11,8 +11,9 @@ export default {
       }
     },
     fontFamily: {
-      // sans: 'DM Sans',
-      // serif: 'Lora'
+      lora: ['Lora', 'serif'],
+      suranna: ['Suranna', 'serif'],
+      sans: ['system-ui', 'sans-serif']
     }
   },
   plugins: [],
