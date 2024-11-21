@@ -44,6 +44,14 @@ const navItems: NavItem[] = [
 ];
 
 const currentPath = Astro.url.pathname;
+
+// Helper function to check if a path is active
+const isActive = (itemPath: string, currentPath: string) => {
+  if (itemPath === '/') {
+    return currentPath === '/';
+  }
+  return currentPath.startsWith(itemPath);
+};
 ---
 
 <script>
@@ -105,7 +113,12 @@ const currentPath = Astro.url.pathname;
             {item.children ? (
               <>
                 <button 
-                  class="inline-flex items-center px-1 pt-1 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 cursor-pointer"
+                  class:list={[
+                    "inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-150",
+                    isActive(item.path, currentPath) 
+                      ? "text-neutral-900 dark:text-neutral-100" 
+                      : "text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100"
+                  ]}
                 >
                   {item.title}
                   <Icon name="mdi:chevron-down" class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" />
@@ -119,7 +132,12 @@ const currentPath = Astro.url.pathname;
                     {item.children.map(child => (
                       <a
                         href={child.path}
-                        class="block px-4 py-3 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 whitespace-nowrap transition-colors duration-150"
+                        class:list={[
+                          "block px-4 py-3 text-sm whitespace-nowrap transition-colors duration-150",
+                          currentPath === child.path
+                            ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
+                            : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        ]}
                       >
                         {child.title}
                       </a>
@@ -130,7 +148,12 @@ const currentPath = Astro.url.pathname;
             ) : (
               <a
                 href={item.path}
-                class="inline-flex items-center px-1 pt-1 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100"
+                class:list={[
+                  "inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-150",
+                  isActive(item.path, currentPath)
+                    ? "text-neutral-900 dark:text-neutral-100"
+                    : "text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100"
+                ]}
               >
                 {item.title}
               </a>
@@ -173,7 +196,12 @@ const currentPath = Astro.url.pathname;
           {item.children ? (
             <div>
               <button
-                class="dropdown-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                class:list={[
+                  "dropdown-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-150",
+                  isActive(item.path, currentPath)
+                    ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
+                    : "text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                ]}
               >
                 {item.title}
                 <Icon name="mdi:chevron-down" class="chevron-icon w-5 h-5 transform transition-transform duration-200" />
@@ -182,7 +210,12 @@ const currentPath = Astro.url.pathname;
                 {item.children.map(child => (
                   <a
                     href={child.path}
-                    class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                    class:list={[
+                      "block px-3 py-2 rounded-md text-base font-medium transition-colors duration-150",
+                      currentPath === child.path
+                        ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
+                        : "text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                    ]}
                   >
                     {child.title}
                   </a>
@@ -192,7 +225,12 @@ const currentPath = Astro.url.pathname;
           ) : (
             <a
               href={item.path}
-              class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+              class:list={[
+                "block px-3 py-2 rounded-md text-base font-medium transition-colors duration-150",
+                isActive(item.path, currentPath)
+                  ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
+                  : "text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+              ]}
             >
               {item.title}
             </a>
