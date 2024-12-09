@@ -14,12 +14,12 @@ const { title, basePath, allowedFolders } = Astro.props;
 // Get root level contents
 const { folders, images } = await getFolderContents();
 
-// Filter folders
+// Filter and prepare folder previews
 const filteredFolders = folders.filter((folder) =>
-  allowedFolders.includes(folder.name)
+  allowedFolders.includes(folder.name),
 );
 
-// Get a preview image for each folder
+// Load preview images for each folder
 const folderPreviews = await Promise.all(
   filteredFolders.map(async (folder) => {
     const folderImages = await getImages(folder.path);
@@ -27,7 +27,7 @@ const folderPreviews = await Promise.all(
       ...folder,
       previewImage: folderImages[0]?.url || null,
     };
-  })
+  }),
 );
 ---
 
@@ -90,7 +90,7 @@ const folderPreviews = await Promise.all(
   <!-- Full-width Folders with Preview Images -->
   {
     folderPreviews.length > 0 && (
-      <section class='mb-12 space-y-4'>
+      <section class='mb-12 space-y-4 folders-section'>
         {folderPreviews.map((folder) => (
           <a
             href={`/${basePath}/${folder.path}`}
@@ -125,7 +125,7 @@ const folderPreviews = await Promise.all(
   <!-- Recent Images Preview -->
   {
     images.length > 0 && (
-      <section>
+      <section class='recent-images-section'>
         <div class='flex justify-between items-center mb-6'>
           <h2 class='text-2xl font-bold dark:text-gray-100'>Recent Images</h2>
           <span class='text-sm text-gray-500 dark:text-gray-400'>
@@ -138,10 +138,10 @@ const folderPreviews = await Promise.all(
               <Image
                 src={image.url}
                 alt={image.public_id.split('/').pop()}
-                class='object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-300'
+                class='object-cover w-full h-full'
                 loading='lazy'
               />
-              <div class='absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 dark:group-hover:bg-opacity-30 transition-opacity duration-300' />
+              <div class='absolute inset-0 bg-black opacity-0' />
             </div>
           ))}
         </div>
@@ -149,3 +149,94 @@ const folderPreviews = await Promise.all(
     )
   }
 </Layout>
+
+<script>
+  import { animate, scroll, inView, stagger } from 'motion';
+
+  // Folder preview animations
+  const folderElements = document.querySelectorAll('.folders-section a');
+  if (folderElements.length) {
+    animate(
+      folderElements,
+      {
+        opacity: [0, 1],
+        y: [100, 0],
+        scale: [0.9, 1],
+      },
+      {
+        delay: stagger(0.1),
+        duration: 0.8,
+        // easing: [.22, .03, .26, 1]
+      },
+    );
+  }
+
+  // Gallery grid animations and interactions
+  const images = document.querySelectorAll('.recent-images-section .group');
+  
+  // Initial animation on view
+  images.forEach((group, index) => {
+    // View-triggered animations
+    inView(group as HTMLElement, () => {
+      animate(
+        group as HTMLElement,
+        { 
+          opacity: [0, 1],
+          scale: [0.95, 1],
+          y: [30, 0]
+        },
+        {
+          delay: index * 0.1,
+          duration: 0.7,
+          // easing: [.22, .03, .26, 1]
+        }
+      );
+    });
+
+    // Interactive hover effects
+    const img = group.querySelector('img');
+    const overlay = group.querySelector('.bg-black');
+    
+    if (!img || !overlay) return;
+
+    group.addEventListener('mouseenter', () => {
+      animate(img as HTMLElement, 
+        { 
+          scale: 1.1,
+          filter: 'brightness(0.9)'
+        }, 
+        { duration: 0.4 }
+      );
+      animate(overlay as HTMLElement,
+        { opacity: 0.2 },
+        { duration: 0.4 }
+      );
+    });
+
+    group.addEventListener('mouseleave', () => {
+      animate(img as HTMLElement, 
+        { 
+          scale: 1,
+          filter: 'brightness(1)'
+        }, 
+        { duration: 0.4 }
+      );
+      animate(overlay as HTMLElement,
+        { opacity: 0 },
+        { duration: 0.4 }
+      );
+    });
+  });
+
+  // Subtle scroll-based parallax
+  scroll(
+    animate('.recent-images-section .group', {
+      y: [-20, 20],
+      scale: [1, 1.02]
+    }),
+    { 
+      offset: ["start end", "end start"],
+      // easing: 'ease-out'
+    }
+  );
+</script>
