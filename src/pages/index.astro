@@ -4,64 +4,59 @@ import AppLayout from '../layouts/AppLayout.astro';
 import { getImages } from '../utils/lib/cloudinary';
 import { Image } from '@unpic/astro';
 
-// Get one representative image from each folder
+// Pre-load representative images for each section
 const natureImages = await getImages('nature');
 const travelImages = await getImages('europe');
 const architectureImages = await getImages('architecture');
 
-// Get the first image from each category, or use a default if none exists
+// Fallback to placeholder if no images are found
 const natureImage = natureImages[0]?.url || 'https://placeholder.com/1200x800';
 const travelImage = travelImages[0]?.url || 'https://placeholder.com/1200x800';
 const architectureImage = architectureImages[0]?.url || 'https://placeholder.com/1200x800';
 ---
 
 <AppLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-    <!-- <h1 class="text-4xl font-bold text-center mb-12">Photography Portfolio</h1> -->
-    
     <div class="space-y-4">
-      <!-- Nature Section -->
-      <div class="relative">
-        <Image
-          src={natureImage} 
-          alt="Nature Photography"
-          class="w-full h-[32rem] object-cover rounded-sm shadow-lg"
-        />
-        <a 
-          href="/nature" 
-          class="absolute bottom-4 left-4 bg-black/80 dark:bg-white/80 text-white dark:text-black px-6 py-2 rounded-sm hover:bg-opacity-70 dark:hover:bg-opacity-70 transition-all duration-300 text-xl font-semibold"
-        >
-          Nature
-        </a>
-      </div>
-
-      <!-- Travel Section -->
-      <div class="relative">
-        <Image
-          src={travelImage} 
-          alt="Travel Photography"
-          class="w-full h-[32rem] object-cover rounded-sm shadow-lg"
-        />
-        <a 
-          href="/travels" 
-          class="absolute bottom-4 left-4 bg-black/80 dark:bg-white/80 text-white dark:text-black px-6 py-2 rounded-sm hover:bg-opacity-70 dark:hover:bg-opacity-70 transition-all duration-300 text-xl font-semibold"
-        >
-          Travels
-        </a>
-      </div>
-
-      <!-- Architecture Section -->
-      <div class="relative">
-        <Image
-          src={architectureImage} 
-          alt="Architecture Photography"
-          class="w-full h-[32rem] object-cover rounded-sm shadow-lg"
-        />
-        <a 
-          href="/architecture" 
-          class="absolute bottom-4 left-4 bg-black/80 dark:bg-white/80 text-white dark:text-black px-6 py-2 rounded-sm hover:bg-opacity-70 dark:hover:bg-opacity-70 transition-all duration-300 text-xl font-semibold"
-        >
-          Architecture
-        </a>
-      </div>
+      {[
+        { image: natureImage, title: "Nature", href: "/nature" },
+        { image: travelImage, title: "Travels", href: "/travels" },
+        { image: architectureImage, title: "Architecture", href: "/architecture" }
+      ].map((section, index) => (
+        <div class="relative section-container">
+          <Image
+            src={section.image} 
+            alt={`${section.title} Photography`}
+            class="w-full h-[32rem] object-cover rounded-sm shadow-lg image-hover"
+          />
+          <a 
+            href={section.href} 
+            class="absolute bottom-4 left-4 bg-black/80 dark:bg-white/80 text-white dark:text-black px-6 py-2 rounded-sm hover:bg-opacity-70 dark:hover:bg-opacity-70 transition-all duration-300 text-xl font-semibold link-hover"
+          >
+            {section.title}
+          </a>
+        </div>
+      ))}
     </div>
 </AppLayout>
+
+<script>
+  import { animate, stagger } from "motion";
+
+  // Primary sections entrance animation
+  animate(
+    ".section-container",
+    { opacity: [0, 1], y: [100, 0] },
+    { duration: 0.8, delay: stagger(0.2) }
+  );
+
+  // Image hover effects
+  document.querySelectorAll(".image-hover").forEach(image => {
+    // ...existing hover animations...
+    image.addEventListener("mouseenter", () => {
+      animate(image, { scale: 1.02 }, { duration: 0.3 });
+    });
+    image.addEventListener("mouseleave", () => {
+      animate(image, { scale: 1 }, { duration: 0.3 });
+    });
+  });
+</script>

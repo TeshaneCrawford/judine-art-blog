@@ -2,11 +2,33 @@
 import Layout from '../layouts/GalleryLayout.astro';
 import { getFolderContents } from '../utils/lib/cloudinary';
 import { Image } from '@unpic/astro';
+import { Carousel } from 'astro-carousel';
 
+// Component interfaces
 interface Props {
   section: string;
   validCategories: string[];
 }
+
+// Image type definitions for carousel
+type CarouselImage = {
+  src: string;
+  alt: string;
+  format: string;
+  width: number;
+  height: number;
+  widths: number[];
+};
+
+type CarouselProps = {
+  images: CarouselImage[];
+  class?: string;
+  imageClass?: string;
+  loadingSpinnerColors?: {
+    foreground: string;
+    background: string;
+  };
+};
 
 const { section, validCategories } = Astro.props;
 const { path = '' } = Astro.params;
@@ -23,8 +45,10 @@ const breadcrumbs = pathParts.map((part, index) => ({
 
 const pageTitle =
   pathParts.length > 0
-    ? `${pathParts[pathParts.length - 1].charAt(0).toUpperCase() +
-      pathParts[pathParts.length - 1].slice(1)} | Judine Art`
+    ? `${
+        pathParts[pathParts.length - 1].charAt(0).toUpperCase() +
+        pathParts[pathParts.length - 1].slice(1)
+      } | Judine Art`
     : `${section} | Judine Art`;
 
 const category = pathParts[0];
@@ -32,16 +56,36 @@ if (decodedPath && !validCategories.includes(category)) {
   return Astro.redirect('/404');
 }
 
+// Set up masonry grid
 const columnCount = 3;
 const columns = Array.from({ length: columnCount }, (_, i) =>
-  images.filter((_, index) => index % columnCount === i)
+  images.filter((_, index) => index % columnCount === i),
 );
+
+// Transform images for carousel
+const carouselImages: CarouselImage[] = images.map((image) => ({
+  src: image.url,
+  alt: image.public_id.split('/').pop() || 'Gallery image',
+  format: 'webp', // Assuming Cloudinary serves webp
+  width: image.width || 1200,
+  height: image.height || 800,
+  widths: [450, 675, 1350],
+}));
+
+// Get current image index from URL if present
+const urlParams = new URL(Astro.request.url).searchParams;
+const initialImage = parseInt(urlParams.get('image') || '0');
 ---
 
 <Layout title={pageTitle}>
   <!-- Breadcrumb Navigation -->
-  <nav class='mb-6 flex items-center space-x-2 text-gray-600 dark:text-gray-400'>
-    <a href={`/${section.toLowerCase()}`} class='hover:text-gray-600 dark:hover:text-gray-300 transition-colors'>
+  <nav
+    class='mb-6 flex items-center space-x-2 text-gray-600 dark:text-gray-400'
+  >
+    <a
+      href={`/${section.toLowerCase()}`}
+      class='hover:text-gray-600 dark:hover:text-gray-300 transition-colors'
+    >
       {section}
     </a>
     {
@@ -53,7 +97,8 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
             class:list={[
               'hover:text-gray-600 dark:hover:text-gray-300 transition-colors',
               {
-                'font-semibold text-gray-900 dark:text-gray-100': index === breadcrumbs.length - 1,
+                'font-semibold text-gray-900 dark:text-gray-100':
+                  index === breadcrumbs.length - 1,
               },
             ]}
           >
@@ -67,7 +112,7 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
   <!-- Folders Grid -->
   {
     folders.length > 0 && (
-      <section class='mb-12'>
+      <section class='mb-12 folders-container'>
         <h2 class='text-2xl font-bold mb-6 dark:text-white'>Folders</h2>
         <div class='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4'>
           {folders.map((folder) => (
@@ -101,25 +146,35 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
     )
   }
 
-  <!-- Masonry Images Grid -->
+  <!-- Masonry Images Grid with Carousel Trigger -->
   {
     images.length > 0 ? (
-      <section class='mx-auto'>
-        <div class='grid grid-cols-2 sm:grid-cols-3 gap-4'>
-          {columns.map((column) => (
+      <section class='mx-auto images-container'>
+        <div
+          class='grid grid-cols-2 sm:grid-cols-3 gap-4'
+          id='carouselTargetList'
+        >
+          {columns.map((column, colIndex) => (
             <div class='flex flex-col gap-4'>
-              {column.map((image) => (
-                <div class='group relative overflow-hidden rounded-sm bg-gray-100 dark:bg-gray-800'>
-                  <Image
-                    src={image.url}
-                    alt={image.public_id.split('/').pop() || 'Gallery image'}
-                    class='w-full h-auto object-cover transition-transform duration-300 group-hover:scale-10'
-                    loading='lazy'
-                    layout='fullWidth'
-                  />
-                  <div class='absolute inset-0 bg-black opacity-0 group-hover:opacity-20 dark:group-hover:opacity-40 transition-opacity duration-300' />
-                </div>
-              ))}
+              {column.map((image, imgIndex) => {
+                const index = colIndex + imgIndex * columns.length;
+                return (
+                  <a
+                    href={`${Astro.url.pathname}?image=${index}`}
+                    data-carousel-index={index}
+                    class='group relative overflow-hidden rounded-sm bg-gray-100 dark:bg-gray-800'
+                  >
+                    <Image
+                      src={image.url}
+                      alt={image.public_id.split('/').pop() || 'Gallery image'}
+                      class='w-full h-auto object-cover transition-transform duration-300'
+                      loading='lazy'
+                      layout='fullWidth'
+                    />
+                    <div class='absolute inset-0 bg-black opacity-0 group-hover:opacity-20 dark:group-hover:opacity-40 transition-opacity duration-300' />
+                  </a>
+                );
+              })}
             </div>
           ))}
         </div>
@@ -127,11 +182,16 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
     ) : (
       !folders.length && (
         <div class='text-center py-12'>
-          <p class='text-gray-500 dark:text-gray-400 text-lg'>No images found in this folder.</p>
+          <p class='text-gray-500 dark:text-gray-400 text-lg'>
+            No images found in this folder.
+          </p>
         </div>
       )
     )
   }
+
+  <!-- Carousel Component -->
+  {images.length > 0 && <Carousel images={carouselImages} />}
 
   <!-- Loading State -->
   <div
@@ -140,12 +200,15 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
   >
     <div
       class='animate-spin rounded-full h-12 w-12 border-4 border-gray-500 dark:border-gray-400 border-t-transparent'
-    />
+    >
+    </div>
   </div>
 </Layout>
 
 <script>
-  // Show loading state during navigation
+  import { animate, scroll, inView, stagger } from 'motion';
+
+  // Navigation state handlers
   document.addEventListener('astro:before-preparation', () => {
     document.getElementById('loading')?.classList.remove('hidden');
   });
@@ -154,7 +217,7 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
     document.getElementById('loading')?.classList.add('hidden');
   });
 
-  // Optional: Add fade-in animation for images as they load
+  // Progressive image loading animations
   document.addEventListener('astro:page-load', () => {
     const images = document.querySelectorAll('img');
     images.forEach((img) => {
@@ -165,6 +228,71 @@ const columns = Array.from({ length: columnCount }, (_, i) =>
       });
     });
   });
+
+  // Folder entrance animations
+  const folderElements = document.querySelectorAll('.folders-container a');
+  if (folderElements.length) {
+    animate(
+      folderElements,
+      {
+        opacity: [0, 1],
+        scale: [0.9, 1],
+        y: [20, 0],
+      },
+      {
+        delay: stagger(0.1),
+        duration: 0.5,
+        // easing: [.22, .03, .26, 1]
+      },
+    );
+    animate(
+      '.section-container',
+      { opacity: [0, 1], y: [100, 0] },
+      { duration: 0.8, delay: stagger(0.2) },
+    );
+  }
+
+  // Masonry grid animations and interactions
+  document.querySelectorAll('.images-container a').forEach((image, index) => {
+    inView(image as HTMLElement, () => {
+      animate(
+        image as HTMLElement,
+        {
+          opacity: [0, 1],
+          y: [50, 0],
+          scale: [0.95, 1],
+        },
+        {
+          duration: 0.6,
+          delay: index * 0.1,
+          // easing: [.22, .03, .26, 1]
+        },
+      );
+    });
+
+    // Add hover animation
+    image.addEventListener('mouseenter', () => {
+      animate(image as HTMLElement, { scale: 1.03 }, { duration: 0.3 });
+    });
+
+    image.addEventListener('mouseleave', () => {
+      animate(image as HTMLElement, { scale: 1 }, { duration: 0.3 });
+    });
+  });
+
+  // Scroll-based parallax effects
+  const imageElements = document.querySelectorAll('.images-container a');
+  if (imageElements.length) {
+    scroll(
+      animate(imageElements, {
+        y: [-30, 30],
+        scale: [1, 1.02],
+      }),
+      {
+        offset: ['start end', 'end start'],
+      },
+    );
+  }
 </script>
 
 <style>

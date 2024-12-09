@@ -4,13 +4,10 @@ import BioPhoto from '../components/BioPhoto.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
-<Layout
-  title= `Bio - ${SITE_TITLE}`
-  description={SITE_DESCRIPTION}
->
+<Layout title={`Bio - ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
   <div class="bio-container">
-    <div class="bio-content mt-12">
-      <!-- <h1 class="text-xl font-bold">About Me</h1> -->
+    <div class="bio-content mt-12 content-animate">
+      <!-- Biography text content -->
       <p class="text-gray-900 dark:text-gray-100">
         Judine Fiddler is a Jamaican-born artist currently based in New York. With an undergraduate 
         degree from New York University, where she studied both Psychology and Studio Art, Fiddler 
@@ -49,11 +46,36 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
       </a>
     </div>
     </div>
-    <div class="bio-photo">
+    <div class="bio-photo photo-animate">
       <BioPhoto folder="Biography" />
     </div>
   </div>
 </Layout>
+
+<script>
+  import { animate, stagger } from "motion";
+
+  // Slide-in animations for content and photo
+  animate(
+    ".content-animate",
+    { opacity: [0, 1], x: [-50, 0] },
+    { duration: 0.8 }
+  );
+
+  // Animate bio content and photo
+  animate(
+    ".photo-animate",
+    { opacity: [0, 1], x: [50, 0] },
+    { duration: 0.8 }
+  );
+
+  // Animate social links
+  animate(
+    ".bio-content a",
+    { opacity: [0, 1], y: [20, 0] },
+    { delay: stagger(0.2), duration: 0.4 }
+  );
+</script>
 
 <style>
   .bio-container {
