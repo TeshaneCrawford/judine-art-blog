@@ -52,8 +52,38 @@ const folderPreviews = await Promise.all(
     border-color: white;
   }
 
-  /* Rest of your existing styles */
-  // ...existing code...
+  @keyframes borderPulse {
+    0% {
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+    50% {
+      border-color: rgba(255, 255, 255, 1);
+    }
+    100% {
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  /* Underline animation for "View Album" */
+  .animated-underline {
+    position: relative;
+    display: inline-block;
+  }
+
+  .animated-underline::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: white;
+    transition: width 0.3s ease;
+  }
+
+  .group:hover .animated-underline::after {
+    width: 100%;
+  }
 </style>
 
 <Layout title={`${title} | Judine Art`}>
