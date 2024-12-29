@@ -97,7 +97,7 @@ const isActive = (itemPath: string, currentPath: string) => {
 
 <nav
   id="navbar"
-  class="top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md"
 >
   <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
@@ -124,7 +124,7 @@ const isActive = (itemPath: string, currentPath: string) => {
                   <Icon name="mdi:chevron-down" class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" />
                 </button>
                 {/* Dropdown container with larger hit area */}
-                <div class="absolute left-0 pt-2 w-max">
+                <div class="absolute left-0 pt-2 w-max z-[60]">
                   {/* Invisible area to prevent gap between button and dropdown */}
                   <div class="invisible h-2 -mt-2"></div>
                   {/* Actual dropdown content */}
